@@ -42,7 +42,7 @@
       <label for="file">Arquivo:</label>
       <input type="file" class="form-control" name="file" id="file" required>
     </div>
-    <button type="submit" class="btn btn-primary">Enviar Arquivo</button>
+    <button type="submit" class="btn btn-primary" onclick="EnviarArquivo()">Enviar Arquivo</button>
   </form>
 </div>
 
