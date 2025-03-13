@@ -1,21 +1,25 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
 
 <div class="container mt-3">
   <div class="mt-4 p-5 bg-primary text-white rounded">
-    <h1>Play My Songs</h1>
+    <h1>Login</h1>
   </div>
 </div>
 
 <div class="container mt-3">
-  <!-- Formulário de Login -->
+  <% String erro = request.getParameter("erro"); %>
+  <% if ("1".equals(erro)) { %>
+  <div class="alert alert-danger" role="alert">
+    Email ou senha incorretos!
+  </div>
+  <% } %>
+
   <form method="post" action="login-servlet">
     <div class="mb-3 mt-3">
       <label for="email">Email:</label>
@@ -25,18 +29,8 @@
       <label for="senha">Senha:</label>
       <input type="password" class="form-control" id="senha" placeholder="Informe sua senha" name="senha" required>
     </div>
-
-    <div class="mb-3 mt-3">
-      <button type="submit" class="btn btn-primary">Login</button>
-    </div>
+    <button type="submit" class="btn btn-primary">Confirmar</button>
   </form>
-
-  <!-- Botão para cadastro de usuários -->
-  <div class="mb-3 mt-3">
-    <form method="get" action="CadUsuario.jsp">
-      <button type="submit" class="btn btn-secondary">Criar Conta</button>
-    </form>
-  </div>
 </div>
 
 </body>

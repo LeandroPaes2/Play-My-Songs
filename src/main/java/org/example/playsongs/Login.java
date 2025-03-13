@@ -1,28 +1,29 @@
 package org.example.playsongs;
 
 import java.io.*;
-
-import org.example.playsongs.util.Usuario;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 @WebServlet(name = "loginServlet", value = "/login-servlet")
-public class Login extends HttpServlet{
+public class Login extends HttpServlet {
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String email = request.getParameter("email");
-        String senha  = request.getParameter("senha");
-        if(email!=null && senha!=null)
-        {
-            Usuario user=new Usuario(email,1);
-            //guardar as informações do usuário na sessão
-            HttpSession httpSession=request.getSession();
-            httpSession.setAttribute("usuario",user);
-            response.sendRedirect("CadUsuario.jsp");
-            return;
+        String senha = request.getParameter("senha");
 
+        if (email != null && senha != null && email.contains("@")) {
+            String senhaEsperada = email.substring(0, email.indexOf("@"));
+
+            if (senha.equals(senhaEsperada)) {
+                // Login válido
+                HttpSession httpSession = request.getSession();
+                httpSession.setAttribute("usuario", email);
+                response.sendRedirect("CadMusica.jsp");
+                return;
+            }
         }
-        response.sendRedirect(".");
-    }
 
+        // Login inválido
+        response.sendRedirect("erro.jsp?erro=1");
+    }
 }

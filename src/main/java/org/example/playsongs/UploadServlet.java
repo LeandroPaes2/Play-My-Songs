@@ -14,38 +14,48 @@ import jakarta.servlet.annotation.*;
 @WebServlet(name = "uploadServlet", value = "/upload-servlet")
 public class UploadServlet extends HttpServlet {
 
-    private static final String UPLOAD_DIR = "uploads";  // Pasta onde os arquivos serão salvos
+    private static final String UPLOAD_DIR = "MUSIQUINHAS";
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/plain;charset=UTF-8");
+        String titulo = request.getParameter("titulo");
+        String genero = request.getParameter("genero");
+        String artista = request.getParameter("artista");
 
-        try {
-            Part filePart = request.getPart("file");
-            String fileName = filePart.getSubmittedFileName();
+        if (titulo != null && genero != null && artista != null) {
+            try (PrintWriter writer = response.getWriter()) {
+                titulo = titulo.replace(" ", "_");
+                genero = genero.replace(" ", "_").toLowerCase();
+                artista = artista.replace(" ", "_").replace("'", "");
 
-            // Criando a pasta "uploads" se não existir
-            String uploadPath = getServletContext().getRealPath("/") + File.separator + UPLOAD_DIR;
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
+                String fileName = titulo + "_" + genero + "_" + artista + ".mp3";
 
-            // Salvando o arquivo
-            File file = new File(uploadPath + File.separator + fileName);
-            try (InputStream fileContent = filePart.getInputStream();
-                 OutputStream out = new FileOutputStream(file)) {
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = fileContent.read(buffer)) != -1) {
-                    out.write(buffer, 0, bytesRead);
+                Part filePart = request.getPart("file");
+
+                String uploadPath = getServletContext().getRealPath("/") + File.separator + UPLOAD_DIR;
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdir();
                 }
+
+                File file = new File(uploadPath + File.separator + fileName);
+                try (InputStream fileContent = filePart.getInputStream();
+                     OutputStream out = new FileOutputStream(file)) {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = fileContent.read(buffer)) != -1) {
+                        out.write(buffer, 0, bytesRead);
+                    }
+                }
+
+
+                response.sendRedirect("CadMusica.jsp");
+            } catch (Exception e) {
+                try (PrintWriter writer = response.getWriter()) {
+                    writer.println("Erro ao receber o arquivo: " + e.getMessage());
+                } catch (IOException ignored) {}
             }
 
-            response.getWriter().write("Arquivo enviado com sucesso!");
-        } catch (Exception e) {
-            try {
-                response.getWriter().write("Erro ao receber o arquivo: " + e.getMessage());
-            } catch (IOException ignored) {}
         }
     }
 }
