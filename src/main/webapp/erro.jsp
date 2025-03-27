@@ -6,13 +6,14 @@
 </head>
 <body>
 
-<div class="container mt-3">
-  <div class="mt-4 p-5 bg-primary text-white rounded">
-    <h1>Login</h1>
+<header class=" bg-dark text-white p-3 ">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <h1>Login</h1>
+    </div>
   </div>
-</div>
-
-<div class="container mt-3">
+</header>
+  <div class="container mt-3">
   <% String erro = request.getParameter("erro"); %>
   <% if ("1".equals(erro)) { %>
   <div class="alert alert-danger" role="alert">

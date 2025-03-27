@@ -3,6 +3,7 @@ package org.example.playsongs;
 import java.io.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.example.playsongs.entities.Usuario;
 
 @WebServlet(name = "loginServlet", value = "/login-servlet")
 public class Login extends HttpServlet {
@@ -15,15 +16,16 @@ public class Login extends HttpServlet {
             String senhaEsperada = email.substring(0, email.indexOf("@"));
 
             if (senha.equals(senhaEsperada)) {
-                // Login válido
+
+                Usuario usuario = new Usuario(email,1);
                 HttpSession httpSession = request.getSession();
-                httpSession.setAttribute("usuario", email);
+                httpSession.setAttribute("usuario", usuario);
                 response.sendRedirect("CadMusica.jsp");
                 return;
             }
         }
 
-        // Login inválido
+
         response.sendRedirect("erro.jsp?erro=1");
     }
 }

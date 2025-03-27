@@ -57,5 +57,8 @@ public class UploadServlet extends HttpServlet {
             }
 
         }
+        else {
+            response.sendRedirect("CadMusica.jsp");
+        }
     }
 }
